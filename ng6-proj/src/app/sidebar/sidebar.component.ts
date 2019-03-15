@@ -6,7 +6,7 @@ import { Router, NavigationEnd} from '@angular/router';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-
+    classUrl: string;
   constructor(private router:Router) {
   	router.events.subscribe((_:NavigartionEnd) => this.currentUrl = _.url)
   }
