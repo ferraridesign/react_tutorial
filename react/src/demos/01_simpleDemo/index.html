@@ -1,0 +1,197 @@
+	<!DOCTYPE html>
+	<html>
+	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>React - Template</title>
+	    <link rel="stylesheet" type="text/css" href="../../css/main.css">
+	    <link rel="stylesheet" type="text/css" href="../../css/font-awesome.min.css">
+	    <script src="../../js/react.min.js"></script>
+	    <script src="../../js/react-dom.min.js"></script>
+	    <script src="../../js/browser.min.js"></script>
+	</head>
+	<body>
+
+	    <div id="example"></div>
+
+	    <script type="text/babel">
+
+	    	
+var Comment = React.createClass({
+	getInitialState: function(){
+   		return {editing:false}
+   	},
+	edit: function() {
+		this.setState({
+   		 editing: true
+   	});
+	},
+	save: function() {
+	var val = this.refs.newText.value;
+	this.props.updateCommentText(this.refs.newText.value, this.props.index)
+
+	this.setState({
+   		 editing: false
+   	});
+	},
+	remove: function() {
+		this.props.deleteFromBoard(this.props.index)
+	},
+	renderForm: function() {
+		return (
+		<div className="commentContainer">
+			<textarea ref="newText" defaultValue={this.props.children}></textarea>
+			<button onClick={this.save} className="button-success">Save</button>
+
+		</div>)
+},
+	renderNormal: function() {
+		return (
+		<div className="commentContainer">
+			<div className="commentText">{this.props.children}</div>
+			<button onClick={this.edit} className="buttonPrimary">Edit</button>
+			<button onClick={this.remove} className="buttonDanger">Remove</button>
+		</div>
+		)
+	},
+
+	render: function() {
+		if(this.state.editing){
+			return this.renderForm();
+		}else{
+			return this.renderNormal();
+		}
+	}
+});
+
+var Board = React.createClass({
+	getInitialState: function(){
+		 return {
+		 	comments:[]
+		 }
+	},
+
+	add: function(text){
+		var arr = this.state.comments;
+		arr.push(text);
+		this.setState({
+			comments: arr
+	})
+},
+
+	removeComment: function(i){
+		var arr = this.state.comments;
+		arr.splice(i, 1);
+		this.setState({
+			comments: arr
+	})
+},
+
+	updateComment: function(newText, i){
+		var arr = this.state.comments;
+		arr[i] = newText;
+		this.setState({
+			comments: arr
+	})
+},
+	eachComment: function (text, i) {
+	       	return (
+	       			<Comment key={i} index={i} updateCommentText={this.updateComment} 
+	       			deleteFromBoard = {this.removeComment}>
+	       			{text}
+	       		</Comment>
+
+	       		);
+	        },
+	render: function() {
+	return (
+	<div>
+			<button onClick={this.add.bind(null, 'Bacon Tuna')} className="button-info create"> Add New </button>
+			<div className="board">
+	 		{ 
+	 				this.state.comments.map(this.eachComment)}
+	       </div>
+
+	       </div>
+		);
+	}
+});
+
+var CheckBox = React.createClass({
+   	getInitialState: function(){
+   		return {checked:true}
+   	},
+   	handleChecked: function(){
+   		this.setState({
+   		 checked: !this.state.checked
+   	})
+   },
+
+	render: function() {
+		var msg;
+		if(this.state.checked){
+			msg = 'checked'
+		}else{
+		msg = 'unchecked'
+	}
+	return (
+		<div>
+			<input type="checkbox" onChange={this.handleChecked} defaultChecked={this.state.checked}/>
+			<h3>Checkbox is {msg}</h3>
+		</div>
+
+		);
+	}
+});
+var Movie = React.createClass({
+		render: function() {
+		return (
+		<div>
+			<h1>{this.props.title}</h1>
+			<h2>{this.props.genre}</h2>
+		</div>)
+	}
+
+
+})
+  	var Bacon = React.createClass({
+	    	render: function() {
+	   			 return (
+	   				 <div>
+	   				 	<h3>Good job!</h3>
+	    			<p>Tkae that paragraph</p>
+				</div>);
+	    }
+	    });
+
+
+    
+
+
+
+	ReactDOM.render(<Board />,document.getElementById('example'));
+	    </script>
+
+	</body>
+	</html>
+<!-- ReactDOM.render(
+	        <div>
+	         <Movie title="avatar" genre="horror"/>
+	      <Movie title="New Movie" genre="action"/>
+	   <Movie title="Old Movie" genre="horror"/>
+	</div>,
+	            document.getElementById('example')
+	        );
+
+
+	        ReactDOM.render(
+	       <div className="board">
+	        <Comment> Hey now</Comment>
+	        <Comment> Hey cooool</Comment>
+	        <Comment>  now</Comment>
+
+	       </div>
+	       ,
+	            document.getElementById('example')
+	        );
+	        -->
